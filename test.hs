@@ -202,7 +202,14 @@ rbrack :: Doc -- ^ A ']' character
 lbrace :: Doc -- ^ A '{' character
 rbrace :: Doc -- ^ A '}' character
 semi   = char ';'
-tab = '\t'
+tab='\t'
+sc='\DEL'
+sc = '\"'
+sc = '\&'
+sc = '\''
+specialchar = '\00'
+sc2 = '\o73'
+sc3 = '\x3Ac0'
 tabstr = "stuff\t   "
 comma  = char ','
 colon  = char ':'
@@ -246,6 +253,9 @@ maybeParens True = parens
 maybeBrackets :: Bool -> Doc -> Doc
 maybeBrackets False = id
 maybeBrackets True = brackets
+
+num = 34
+float = 1.23e3
 
 -- | Apply 'braces' to 'Doc' if boolean is true.
 maybeBraces :: Bool -> Doc -> Doc
