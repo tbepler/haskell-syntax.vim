@@ -125,13 +125,19 @@ highlight def link haskellDefault Statement
 syntax region haskellStandaloneDeriving start="\<deriving\>\s\+\<instance\>" end="$"
   \ contains=haskellType,haskellDelimiter,haskellDot,haskellOperators,haskellStandaloneDerivingKeywords
 
-syntax keyword haskellImportKeywords import qualified safe as hiding contained
-syntax keyword haskellForeignKeywords foreign export import ccall safe unsafe interruptible capi prim contained
-highlight def link haskellImportKeywords Include
-highlight def link haskellForeignKeywords Include
+syntax keyword haskellImport import contained
+syntax keyword haskellExport export contained
+syntax keyword haskellForeign foreign contained
+syntax keyword haskellImportKeywords qualified safe as hiding contained
+syntax keyword haskellForeignKeywords ccall safe unsafe interruptible capi prim contained
+highlight def link haskellImport Include
+highlight def link haskellExport Include
+highlight def link haskellForeign Include
+highlight def link haskellImportKeywords Structure
+highlight def link haskellForeignKeywords Structure
 
-syntax region haskellForeignImport start="\<foreign\>" contains=haskellString,haskellOperators,haskellForeignKeywords,haskellIdentifier end="::" keepend
-syntax region haskellImport start="\<import\>" contains=haskellDelimiter,haskellType,haskellDot,haskellImportKeywords,haskellString end="\((\|$\)" keepend
+syntax region haskellForeignImport start="\<foreign\>" contains=haskellOperators,haskellForeignKeywords,haskellIdentifier,haskellImport,haskellExport,haskellForeign,haskellString end="::" keepend
+syntax region haskellImport start="\<import\>" contains=haskellDelimiter,haskellType,haskellDot,haskellImportKeywords,haskellString,haskellImport end="\((\|$\)" keepend
 
 syntax keyword haskellStatement do case of in
 syntax keyword haskellWhere where
@@ -176,8 +182,8 @@ highlight def link haskellDot Operator
 syntax match haskellBacktick "`[A-Za-z_][A-Za-z0-9_\.']*`" contains=haskellDelimiter
 highlight def link haskellBacktick Operator
 
-syntax region hsString start=/\V"/ skip=/\V\\\\\|\\"/ end=/\V"/ contains=hsSpecialChar,@Spell
-highlight def link hsString String
+syntax region haskellString start=/\V"/ skip=/\V\\\\\|\\"/ end=/\V"/ contains=hsSpecialChar,@Spell
+highlight def link haskellString String
 
 "TODO char regex could use some work - maybe use region instead of match?
 syntax match hsChar "[^a-zA-Z0-9_']'\([^\\]\|\\[^']\+\|\\'\)'"lc=1 contains=hsSpecialChar,hsSpecialCharError
@@ -189,7 +195,7 @@ syntax match hsSpecialChar "\v\\o[0-7]+" contained
 syntax match hsSpecialChar "\v\\x[0-9a-fA-F]+" contained
 syntax match hsSpecialChar "\v\\[abfnrtv\"&'\\]" contained
 syntax match hsSpecialChar "\V\\\(NUL\|SOH\|STX\|ETX\|EOT\|ENQ\|ACK\|BEL\|BS\|HT\|LF\|VT\|FF\|CR\|SO\|SI\|DLE\|DC1\|DC2\|DC3\|DC4\|NAK\|SYN\|ETB\|CAN\|EM\|SUB\|ESC\|FS\|GS\|RS\|US\|SP\|DEL\)" contained
-highlight def link hsSpecialChar Type
+highlight def link hsSpecialChar SpecialChar
 
 syntax match hsSpecialCharError "\\&\|'''\+" contained
 highlight def link hsSpecialCharError Error
@@ -208,7 +214,10 @@ highlight def link haskellPragma PreProc
 
 "TODO
 syntax match haskellIdentifier "[_a-z][a-zA-z0-9_']*" contained
+
 syntax match haskellType "\<[A-Z][a-zA-Z0-9_']*\>"
+highlight def link haskellType Type
+
 syntax region haskellRecordBlock start="[A-Z][a-zA-Z0-9']*\s\+{[^-]" end="[^-]}" keepend
   \ contains=haskellType,haskellDelimiter,haskellOperators,haskellDot,haskellRecordField,haskellString,haskellChar,haskellFloat,haskellNumber,haskellBacktick,haskellLineComment, haskellBlockComment,haskellPragma,haskellBottom,haskellDebug,haskellConditional,haskellStatement,haskellWhere,haskellLet
 syntax match haskellQuasiQuoteDelimiters "\[[_a-z][a-zA-z0-9_']*|\||\]" contained
